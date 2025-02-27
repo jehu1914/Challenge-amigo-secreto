@@ -6,8 +6,8 @@ let amigos = [];
 // Função para adicionar um amigo
 function adicionarAmigo() {
     // Captura o valor do campo de entrada
-    let input = document.getElementById("amigo");
-    let nome = input.value.trim(); // Remove espaços em branco no início e no final
+    const input = document.getElementById("amigo");
+    const nome = input.value.trim(); // Remove espaços em branco no início e no final
 
     // Valida a entrada
     if (nome === "") {
@@ -19,22 +19,28 @@ function adicionarAmigo() {
     amigos.push(nome);
     console.log(amigos);
 
-    // Atualiza a lista de amigos no html
+    // Atualiza a lista de amigos na interface
     atualizarListaAmigos();
 
     // Limpa o campo de entrada
     input.value = "";
 }
 
-// Função para atualizar a lista de amigos no html
+// Função para atualizar a lista de amigos na interface
 function atualizarListaAmigos() {
-    let listaAmigos = document.getElementById("listaAmigos");
-    listaAmigos.innerHTML = ""; // Limpa a lista atual
+    // 1. Obter o elemento da lista
+    let lista = document.getElementById("listaAmigos");
 
-    // Adiciona cada amigo à lista
-    amigos.forEach((amigo) => {
-        let itemLista = document.createElement("li");
-        itemLista.textContent = amigo;
-        listaAmigos.appendChild(itemLista);
-    });
+    // 2. Limpar a lista existente
+    lista.innerHTML = "";
+
+    // 3. Percorrer o array e adicionar elementos à lista
+    for (let i = 0; i < amigos.length; i++) {
+        // Cria um novo elemento <li>
+        const itemLista = document.createElement("li");
+        // Define o conteúdo do <li> como o nome do amigo
+        itemLista.textContent = amigos[i];
+        // Adiciona o <li> à lista
+        lista.appendChild(itemLista);
+    }
 }
