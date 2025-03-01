@@ -15,6 +15,12 @@ function adicionarAmigo() {
         return; // Interrompe a execução da função
     }
 
+    // Evitar duplicados
+    if (amigos.includes(nome)) {
+        alert("Este nome já foi adicionado.");
+        return;
+    }
+
     // Adiciona o nome ao array de amigos
     amigos.push(nome);
     console.log(amigos);
@@ -24,7 +30,11 @@ function adicionarAmigo() {
 
     // Limpa o campo de entrada
     input.value = "";
+
+    // Mantener el foco en el campo de entrada
+    input.focus();
 }
+     
 
 // Função para atualizar a lista de amigos na interface
 function atualizarListaAmigos() {
@@ -61,6 +71,12 @@ function sortearAmigo() {
 
     // 4. Mostrar o resultado na interface
     let resultadoElemento = document.getElementById("resultado");
-    resultadoElemento.innerHTML = `<li>${amigoSorteado}</li>`;
+    resultadoElemento.innerHTML = `<li>O amigos secreto sorteado é: ${amigoSorteado}</li>`;
 }
 
+// Evento de tecla "Enter" en el campo de entrada
+document.getElementById("amigo").addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        adicionarAmigo();
+    }
+});
