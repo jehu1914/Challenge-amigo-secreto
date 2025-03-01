@@ -2,6 +2,7 @@
 
 // Array para armazenar os nomes dos amigos
 let amigos = [];
+let amigosDisponiveis = []; // Cópia da lista para controle do sorteio
 
 // Função para adicionar um amigo
 function adicionarAmigo() {
@@ -31,10 +32,9 @@ function adicionarAmigo() {
     // Limpa o campo de entrada
     input.value = "";
 
-    // Mantener el foco en el campo de entrada
+    // Mantém o foco no campo de entrada
     input.focus();
 }
-     
 
 // Função para atualizar a lista de amigos na interface
 function atualizarListaAmigos() {
@@ -55,26 +55,52 @@ function atualizarListaAmigos() {
     }
 }
 
-// Função para sortear um amigo
+// Função para sortear amigos secretos
 function sortearAmigo() {
     // 1. Validar se há amigos disponíveis
-    if (amigos.length === 0) {
-        alert("Por favor, adicione pelo menos um amigo antes de sortear.");
-        return; // Interrompe a execução da função se não houver amigos
+    if (amigos.length < 2) {
+        alert("Por favor, adicione pelo menos dois amigos antes de sortear.");
+        return; // Interrompe a execução da função se não houver amigos suficientes
     }
 
-    // 2. Gerar um índice aleatório
-    let indiceSorteado = Math.floor(Math.random() * amigos.length);
+    // 2. Criar uma cópia da lista de amigos para controle do sorteio
+    amigosDisponiveis = [...amigos]; // Copia a lista original
+    let resultadoSorteio = []; // Array para armazenar os pares de amigos
 
-    // 3. Obter o nome sorteado
-    let amigoSorteado = amigos[indiceSorteado];
+    // 3. Realizar o sorteio
+    for (let i = 0; i < amigos.length; i++) {
+        let amigoAtual = amigos[i];
+        let amigoSecreto;
+
+        // Garantir que o amigo secreto não seja o mesmo que o amigo atual
+        do {
+            let indiceSorteado = Math.floor(Math.random() * amigosDisponiveis.length);
+            amigoSecreto = amigosDisponiveis[indiceSorteado];
+        } while (amigoAtual === amigoSecreto);
+
+        // Adicionar o par ao resultado
+        resultadoSorteio.push(`O amigo secreto de ${amigoAtual} -> ${amigoSecreto}`);
+
+        // Remover o amigo secreto da lista de disponíveis
+        amigosDisponiveis.splice(amigosDisponiveis.indexOf(amigoSecreto), 1);
+    }
 
     // 4. Mostrar o resultado na interface
     let resultadoElemento = document.getElementById("resultado");
-    resultadoElemento.innerHTML = `<li>O amigos secreto sorteado é: ${amigoSorteado}</li>`;
+    resultadoElemento.innerHTML = ""; // Limpa o resultado anterior
+
+    // Adicionar cada par ao resultado
+    resultadoSorteio.forEach(par => {
+        let itemResultado = document.createElement("li");
+        itemResultado.textContent = par;
+        resultadoElemento.appendChild(itemResultado);
+    });
+
+    // 5. Manter a lista original de amigos intacta no HTML
+    atualizarListaAmigos();
 }
 
-// Evento de tecla "Enter" en el campo de entrada
+// Evento de tecla "Enter" no campo de entrada
 document.getElementById("amigo").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         adicionarAmigo();
